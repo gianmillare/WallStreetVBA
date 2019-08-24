@@ -1,0 +1,70 @@
+Sub stockmoderate()
+
+Dim i, j As Long
+Dim total As Double
+Dim ticker As String
+Dim last As Long
+Dim yearchange As Double
+Dim percentchange As Double
+Dim openprice As Double
+Dim closeprice As Double
+
+For Each ws In Worksheets
+    With ws
+    
+    .Cells(1, 9).Value = "TICKER"
+    .Cells(1, 10).Value = "YEAR CHANGE"
+    .Cells(1, 11).Value = "PERCENTAGE CHANGE"
+    .Cells(1, 12).Value = "TOTAL VOLUME"
+    
+    last = .Cells(Rows.Count, 1).End(xlUp).Row
+    
+    openrow = 2
+    j = 2
+    total = 0
+    
+    
+    For i = 2 To last
+        If .Cells(i + 1, 1).Value = .Cells(i, 1).Value Then
+            total = total + .Cells(i, 7).Value
+            
+        Else
+            ticker = .Cells(i, 1).Value
+            openprice = .Cells(openrow, 3).Value
+            closeprice = .Cells(i, 6).Value
+            yearchange = closeprice - openprice
+            
+            If openprice = 0 Then
+                percentchange = 0
+            Else
+                percentchange = yearchange / openprice
+            End If
+            
+            .Cells(j, 9).Value = ticker
+            .Cells(j, 10).Value = yearchange
+            .Cells(j, 11).Value = percentchange
+            .Cells(j, 12).Value = total + .Cells(i, 7).Value
+            
+            .Cells(j, 11).NumberFormat = "0.00%"
+            
+            If .Cells(j, 10).Value > 0 Then
+                .Cells(j, 10).Interior.ColorIndex = 4
+                
+            Else
+                .Cells(j, 10).Interior.ColorIndex = 3
+            
+            End If
+            
+            j = j + 1
+            openrow = i + 1
+            total = 0
+            
+        End If
+        
+    Next i
+    
+    End With
+    
+Next ws
+
+End Sub

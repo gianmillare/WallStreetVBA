@@ -1,0 +1,40 @@
+Sub stockeasy()
+
+Dim i, j As Integer
+Dim ticker As String
+Dim numbers As Long
+Dim total As Double
+
+For Each ws In Worksheets
+    With ws
+
+    numbers = .Cells(Rows.Count, 1).End(xlUp).Row
+
+    .Range("I1").Value = "Ticker"
+    .Range("J1").Value = "Total Value"
+    
+    total = 0
+    j = 2
+    
+For i = 2 To numbers
+    If .Range("A" & i + 1).Value = ws.Range("A" & i).Value Then
+        total = total + .Range("G" & i).Value
+        
+    Else
+        ticker = .Range("A" & i).Value
+        .Range("I" & j).Value = ticker
+        total = total
+
+        .Range("J" & j).Value = total + Range("G" & i).Value
+        
+        j = j + 1
+        total = 0
+    End If
+    
+    Next i
+    
+ End With
+ 
+Next ws
+
+End Sub
